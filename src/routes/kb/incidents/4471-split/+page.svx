@@ -14,11 +14,11 @@ signature: kb-student-s01e03
 </script>
 
 The [#4471 page](/kb/incidents/4471) says the reports are one issue with one fix queued. Its own
-table shows more than one cause. Read report by report, #4471 holds three problems. #4471 stays
-the ticket for the parser. The two problems it does not own now have a ticket each.
+table shows more than one cause. Read report by report, #4471 holds three problems. Each one now
+has a ticket of its own.
 
 <Callout kind="warn">
-The queued parser fix closes #4471 only. The other two problems keep coming after it ships.
+The queued parser fix closes the first problem only. The other two keep coming after it ships.
 </Callout>
 
 ## What #4471 holds
@@ -27,7 +27,7 @@ The queued parser fix closes #4471 only. The other two problems keep coming afte
 
 | problem | in the table above | ticket |
 | --- | --- | --- |
-| `parser` — day and month swapped | the `parser` row | #4471 (its own cause; fix queued) |
+| `parser` — day and month swapped | the `parser` row | [#1](https://github.com/Yogelo/mega-s01e03-kb/issues/1) |
 | `hint` — booking-v3 form asks month first | the `hint` row | [#2](https://github.com/Yogelo/mega-s01e03-kb/issues/2) |
 | `one-day move` — date lands one day off | the note under the table, counted within `parser` | [#3](https://github.com/Yogelo/mega-s01e03-kb/issues/3) |
 
@@ -35,7 +35,7 @@ The queued parser fix closes #4471 only. The other two problems keep coming afte
 
 **`parser` — day and month swapped.** The shared parser reads every date month first. Every
 tenant on file writes the day first, so 3 May becomes 5 March. This is the fix that is queued.
-It is the cause #4471 owns, so #4471 stays its ticket.
+Ticket [#1](https://github.com/Yogelo/mega-s01e03-kb/issues/1).
 
 **`hint` — the booking-v3 form asks for the wrong order.** Under its date field, booking-v3
 prints `MM/DD/YYYY`. People type month first, as the hint tells them, and the form reads the
@@ -61,6 +61,6 @@ way, and their own ticket covers them too:
 
 - Merging on subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)) put all three
   problems in one ticket, because their subjects match. Check the cause before you merge.
-- Close #4471 against the parser fix only. Keep #2 and #3 open.
+- Close #4471 against the parser fix only. Keep the other two tickets open.
 
 <RenderStamp {signature} />
