@@ -1,6 +1,6 @@
 ---
 layout: runbook
-title: '#4471 · three problems, not one'
+title: '#4471 · two causes, not one'
 owner: support desk
 status: draft
 reviewed: 2026-11-06
@@ -14,11 +14,10 @@ signature: kb-student-s01e03
 </script>
 
 The [#4471 page](/kb/incidents/4471) says the reports are one issue with one fix queued. Its own
-table shows more than one cause. Read report by report, #4471 holds three problems. Each one now
-has a ticket of its own.
+table shows more than one cause. Each cause in it now has a ticket of its own.
 
 <Callout kind="warn">
-The queued parser fix closes the first problem only. The other two keep coming after it ships.
+The queued parser fix closes the `parser` ticket only. The `hint` reports keep coming after it ships.
 </Callout>
 
 ## What #4471 holds
@@ -29,9 +28,11 @@ The queued parser fix closes the first problem only. The other two keep coming a
 | --- | --- | --- |
 | `parser` — day and month swapped | the `parser` row | [#1](https://github.com/Yogelo/mega-s01e03-kb/issues/1) |
 | `hint` — booking-v3 form asks month first | the `hint` row | [#2](https://github.com/Yogelo/mega-s01e03-kb/issues/2) |
-| `one-day move` — date lands one day off | the note under the table, counted within `parser` | [#3](https://github.com/Yogelo/mega-s01e03-kb/issues/3) |
 
-## The three problems
+The note under the table stays with the `parser` row: the desk files those reports under `parser`
+by tenant, and so does [#1](https://github.com/Yogelo/mega-s01e03-kb/issues/1).
+
+## The two causes
 
 **`parser` — day and month swapped.** The shared parser reads every date month first. Every
 tenant on file writes the day first, so 3 May becomes 5 March. This is the fix that is queued.
@@ -43,12 +44,9 @@ tenant's way, day first. Only form reports from tenants on booking-v3. The parse
 touch it: the form needs a day-first hint. The table marks it "no ticket of its own"; it has one
 now: [#2](https://github.com/Yogelo/mega-s01e03-kb/issues/2).
 
-**`one-day move` — the date lands one day off.** These reports describe a date one day early,
-an invite sent before the booking, and two clients in Lisbon and Toronto who got different days
-for one meeting. That is a time zone problem, not a swap. The desk noted them
-(`desk-notes.json`) and files them under `parser` by tenant. They stay counted there, the desk's
-way, and their own ticket covers them too:
-[#3](https://github.com/Yogelo/mega-s01e03-kb/issues/3).
+**The one-day move note.** Some `parser` reports describe a date one day off, not a swap. The
+desk noted them (`desk-notes.json`) and files them under `parser`; they are counted in #1, the
+desk's way. Check them again once the parser fix ships.
 
 ## How the count was made
 
@@ -59,8 +57,8 @@ way, and their own ticket covers them too:
 
 ## What changes on the desk
 
-- Merging on subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)) put all three
-  problems in one ticket, because their subjects match. Check the cause before you merge.
-- Close #4471 against the parser fix only. Keep the other two tickets open.
+- Merging on subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)) put both
+  causes in one ticket, because their subjects match. Check the cause before you merge.
+- Close #4471 against the parser fix only. Keep #2 open.
 
 <RenderStamp {signature} />
