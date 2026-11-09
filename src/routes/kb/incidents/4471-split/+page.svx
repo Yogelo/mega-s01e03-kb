@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · three problems, not one'
 owner: support desk
-status: draft
+status: known
 reviewed: 2026-11-09
 signature: kb-student-s01e03
 ---
@@ -11,79 +11,57 @@ signature: kb-student-s01e03
   import CauseTable from '#lib/kb/CauseTable.svelte';
   import Callout from '#lib/kb/Callout.svelte';
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
-  import reports from '#lib/data/reports-4471.json';
-  import notes from '#lib/data/desk-notes.json';
-  import { groupByCause, readAs, uniqueById } from '#lib/kb/causes';
-  import { tenantOf } from '#lib/kb/locales';
-
-  // The desk's own view, as exported: one id, one report; cause by tenant and channel.
-  const merged = uniqueById(reports).filter((r) => r.mergedInto === 4471);
-  const groups = groupByCause(merged, tenantOf);
-  const inGroup = (cause) => groups.find((g) => g.cause === cause);
-  // The desk-noted one-day reports are footnoted under their cause; here they get their own row.
-  const moved = (cause) => readAs(inGroup(cause), notes.oneDayMove);
-  const parser = inGroup('parser').reports.length - moved('parser');
-  const hint = inGroup('hint').reports.length - moved('hint');
-  const oneDay = groups.reduce((n, g) => n + readAs(g, notes.oneDayMove), 0);
 </script>
 
 The [#4471 page](/kb/incidents/4471) says the reports are one issue with one fix queued. Its own
-table shows more than one cause. Read report by report, #4471 holds three problems. Each one now
-has a ticket of its own.
+table shows more than one cause. Read report by report, #4471 holds three problems. Each one has
+a ticket of its own.
 
 <Callout kind="warn">
-The queued parser fix closes the first problem only. The other two keep coming after it ships.
+#4471 closed on 5 October: the parser is fixed and the booking-v3 form is retired. The one-day
+move is not touched by either change. Its ticket stays open.
 </Callout>
 
-## The split
-
-<p><strong>{merged.length}</strong> reports merged into #4471, one ticket each:</p>
-
-<table>
-  <thead><tr><th>problem</th><th>reports</th><th>ticket</th></tr></thead>
-  <tbody>
-    <tr><td><code>parser</code> — day and month swapped</td><td>{parser}</td><td><a href="https://github.com/Yogelo/mega-s01e03-kb/issues/1">#1</a></td></tr>
-    <tr><td><code>hint</code> — booking-v3 form asks month first</td><td>{hint}</td><td><a href="https://github.com/Yogelo/mega-s01e03-kb/issues/2">#2</a></td></tr>
-    <tr><td><code>one-day move</code> — date lands one day off</td><td>{oneDay}</td><td><a href="https://github.com/Yogelo/mega-s01e03-kb/issues/3">#3</a></td></tr>
-  </tbody>
-</table>
-
-## What #4471 holds, as the desk files it
+## What #4471 holds
 
 <CauseTable ticket={4471} />
 
-The desk files the one-day reports under `parser` by tenant and footnotes them. In the split above
-they leave the `parser` row and get their own ticket, so each report sits in one ticket.
+| problem | in the table above | ticket | after #4471 closed |
+| --- | --- | --- | --- |
+| `parser` — day and month swapped | the `parser` row | [#1](https://github.com/Yogelo/mega-s01e03-kb/issues/1) | fixed: `fix(dates): parse dd/mm for eu locales` |
+| `hint` — booking-v3 form asks month first | the `hint` row | [#2](https://github.com/Yogelo/mega-s01e03-kb/issues/2) | won't fix: booking-v3 form retired |
+| `one-day move` — date lands one day off | the note under the table, counted within `parser` | [#3](https://github.com/Yogelo/mega-s01e03-kb/issues/3) | open |
 
 ## The three problems
 
-**`parser` — day and month swapped.** The shared parser reads every date month first. Every
-tenant on file writes the day first, so 3 May becomes 5 March. This is the fix that is queued.
-Ticket [#1](https://github.com/Yogelo/mega-s01e03-kb/issues/1).
+**`parser` — day and month swapped.** The shared parser read every date month first. Every
+tenant on file writes the day first, so 3 May became 5 March. Engineering fixed it when #4471
+closed. Ticket [#1](https://github.com/Yogelo/mega-s01e03-kb/issues/1), closed.
 
 **`hint` — the booking-v3 form asks for the wrong order.** Under its date field, booking-v3
-prints `MM/DD/YYYY`. People type month first, as the hint tells them, and the form reads the
-tenant's way, day first. Only form reports from tenants on booking-v3. The parser fix does not
-touch it: the form needs a day-first hint. The table marks it "no ticket of its own"; it has one
-now: [#2](https://github.com/Yogelo/mega-s01e03-kb/issues/2).
+printed `MM/DD/YYYY`. People typed month first, as the hint told them, and the form read the
+tenant's way, day first. Only form reports from tenants on booking-v3. The parser fix did not
+touch it; the form is retired instead, so no fix is coming. Ticket
+[#2](https://github.com/Yogelo/mega-s01e03-kb/issues/2), closed as won't fix.
 
 **`one-day move` — the date lands one day off.** These reports describe a date one day early,
 an invite sent before the booking, and two clients in Lisbon and Toronto who got different days
 for one meeting. That is a time zone problem, not a swap. The desk noted them
-(`desk-notes.json`). Ticket [#3](https://github.com/Yogelo/mega-s01e03-kb/issues/3).
+(`desk-notes.json`) and files them under `parser` by tenant, so the table counts them there. The
+parser fix does not close them. Ticket [#3](https://github.com/Yogelo/mega-s01e03-kb/issues/3),
+open.
 
 ## How the count was made
 
-- The export repeats some rows. One id, one report (`uniqueById`).
+- The export repeats some rows. One id is one report.
 - Cause by tenant and channel, as in `causes.ts`. `intakeTag` is not the cause: intake tags
   `hint` whenever the reporter's browser is `en-US`.
-- The desk-noted one-day reports (`readAs`) are taken out of their cause and counted once, in #3.
-- Every number on this page is computed from the export at render time.
+- Each ticket counts its reports the desk's way, as the table above shows them.
 
 ## What changes on the desk
 
 - Merging on subject line ([decision 0001](/kb/decisions/0001-dedupe-by-subject)) put all three
   problems in one ticket, because their subjects match. Check the cause before you merge.
-- Close #4471 against the parser fix only. Keep #2 and #3 open.
+- New one-day reports after 5 October go to #3, not to the parser.
 
 <RenderStamp {signature} />
