@@ -4,7 +4,7 @@ title: '#4471 · three problems, not one'
 owner: support desk
 status: known
 reviewed: 2026-11-09
-signature: kb-student-s01e03
+signature: 'v1.eyJzdWIiOiIzMTcwIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTQyMjgzNzEsImV4cCI6MTc5NDMxNDc3MX0.80pX-m6Q5QtUSFq3fTxIPRncki74mSkSQ00VcLsKHpw'
 ---
 
 <script>
